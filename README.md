@@ -9,3 +9,7 @@ Install requirements (Flask)
 ## Running Locally
 
 `flask run`
+
+# Deployment
+
+`fly deploy`
