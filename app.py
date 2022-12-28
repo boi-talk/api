@@ -2,6 +2,7 @@ import json
 from flask import Flask, jsonify
 from models import db, User
 import os
+import hashlib
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
@@ -19,7 +20,10 @@ def index():
 
 @app.route("/users")
 def users():
-  # test_user = User(email="testemail",password="testpass")
+
+  # test_pass = "testpass"
+  # hashed_pass = hashlib.sha256(test_pass.encode('utf-8')).hexdigest()
+  # test_user = User(email="testemail",password=hashed_pass)
   # db.session.add(test_user)
   # db.session.commit()
 
