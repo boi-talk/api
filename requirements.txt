@@ -1,6 +1,7 @@
 Flask
 Flask-SQLAlchemy
 Flask-Migrate
+email_validator
 requests
 python-dotenv
 psycopg2-binary
