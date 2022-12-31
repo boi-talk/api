@@ -57,11 +57,11 @@ def register():
         validate_email(email)
     except EmailNotValidError:
         # email is not valid
-        return "invalid email", 400
+        return jsonify({"error":"invalid email"}), 400
 
     user = User.query.filter_by(email=email).first()
     if user:
-        return "User with email already exists", 409
+        return jsonify({"error":"User with email already exists"}), 409
 
     hashed_pass = bcrypt.hashpw(bytes(password,encoding='utf-8'), bcrypt.gensalt())
     new_user = User(
@@ -72,7 +72,7 @@ def register():
     db.session.add(new_user)
     db.session.commit()
 
-    return "User created", 200
+    return jsonify({"success":"User created"}), 200
 
 
 
