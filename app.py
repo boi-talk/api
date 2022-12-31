@@ -1,3 +1,4 @@
+from sqlalchemy.exc import SQLAlchemyError
 from flask import Flask, jsonify, request
 from models import User
 from dotenv import load_dotenv, find_dotenv
@@ -59,9 +60,9 @@ def register():
         # email is not valid
         return jsonify({"error":"invalid email"}), 400
 
-    user = User.query.filter_by(email=email).first()
-    if user:
-        return jsonify({"error":"User with email already exists"}), 409
+    # user = User.query.filter_by(email=email).first()
+    # if user:
+    #     return jsonify({"error":"User with email already exists"}), 409
 
     hashed_pass = bcrypt.hashpw(bytes(password,encoding='utf-8'), bcrypt.gensalt())
     new_user = User(
@@ -69,9 +70,12 @@ def register():
         password=hashed_pass
     )
 
-    db.session.add(new_user)
-    db.session.commit()
-
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+    except SQLAlchemyError:
+        return jsonify({"error":"User with email already exists"}), 409
+    
     return jsonify({"success":"User created"}), 200
 
 
