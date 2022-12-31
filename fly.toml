@@ -1,9 +1,12 @@
-# fly.toml file generated for boi-talk-api on 2022-12-21T22:08:23-05:00
+# fly.toml file generated for boi-talk-api on 2022-12-30T20:14:20-05:00
 
 app = "boi-talk-api"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
+
+[build]
+  builder = "paketobuildpacks/builder:base"
 
 [env]
   PORT = "8080"
