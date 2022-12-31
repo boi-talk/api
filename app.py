@@ -42,10 +42,15 @@ def users():
 @app.route("/user", methods=["POST"])
 def register():
     data = request.get_json(force=True)
+
+    if ("email" not in data) or ("password" not in data):
+        return jsonify({"error":"No email or password field"}), 400
+
     email = data["email"]
     password = data["password"]
-    if len(email)==0 and len(password)==0:
-        return "Email and password are empty",400
+
+    if (email==None or email=="") or (password==None or password ==""):
+        return jsonify({"error":"Must provide email and password"}), 400
 
     try:
       # validate and get info
@@ -53,9 +58,6 @@ def register():
     except EmailNotValidError:
         # email is not valid
         return "invalid email", 400
-
-    if len(password)==0:
-        return jsonify({"error":"invalid password"}), 400
 
     user = User.query.filter_by(email=email).first()
     if user:
