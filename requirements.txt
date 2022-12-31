@@ -1,6 +1,7 @@
 Flask
 Flask-SQLAlchemy
 Flask-Migrate
+bcrypt
 email_validator
 requests
 python-dotenv

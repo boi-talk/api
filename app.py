@@ -4,8 +4,8 @@ from dotenv import load_dotenv, find_dotenv
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from email_validator import validate_email, EmailNotValidError
-import hashlib
 import os
+import bcrypt
 
 load_dotenv(find_dotenv())
 
@@ -61,7 +61,7 @@ def register():
     if user:
         return "User with email already exists", 409
 
-    hashed_pass = hashlib.sha256(str.encode(password)).hexdigest()
+    hashed_pass = bcrypt.hashpw(bytes(password,encoding='utf-8'), bcrypt.gensalt())
     new_user = User(
         email=email,
         password=hashed_pass
