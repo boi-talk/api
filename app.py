@@ -60,10 +60,6 @@ def register():
         # email is not valid
         return jsonify({"error":"invalid email"}), 400
 
-    # user = User.query.filter_by(email=email).first()
-    # if user:
-    #     return jsonify({"error":"User with email already exists"}), 409
-
     hashed_pass = bcrypt.hashpw(bytes(password,encoding='utf-8'), bcrypt.gensalt())
     new_user = User(
         email=email,
@@ -77,9 +73,6 @@ def register():
         return jsonify({"error":"User with email already exists"}), 409
     
     return jsonify({"success":"User created"}), 200
-
-
-
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 8080))
