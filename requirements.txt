@@ -1,1 +1,8 @@
 Flask
+gunicorn
+werkzeug
+Flask-SQLAlchemy
+Flask-Migrate
+requests
+python-dotenv
+psycopg2-binary
