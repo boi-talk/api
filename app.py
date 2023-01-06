@@ -1,4 +1,4 @@
-from psycopg2.errors import UniqueViolation
+from sqlalchemy.exc import SQLAlchemyError
 from flask import Flask, jsonify, request
 from models import User
 from dotenv import load_dotenv, find_dotenv
@@ -71,7 +71,7 @@ def register():
     try:
         db.session.add(new_user)
         db.session.commit()
-    except UniqueViolation:
+    except SQLAlchemyError:
         return jsonify({"error": "User with email already exists"}), 409
 
     return jsonify({"success": "User created"}), 200
