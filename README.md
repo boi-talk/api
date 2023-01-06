@@ -2,13 +2,29 @@
 
 ## Setup
 
-Make a .env file in the root folder
-Put this in there
-`export DATABASE_URL="PUT YOUR LOCAL DATABASE URL HERE"`
+1. Make a .env file in the root folder
 
-Install requirements (Flask)
+```
+DATABASE_URL="PUT YOUR LOCAL DATABASE URL HERE"
+```
 
-`pip install -r requirements.txt`
+2. Create a virtual environment
+
+```bash
+python3 -m venv venv
+```
+
+3. Activate the virtual environment
+
+```bash
+. venv/bin/activate
+```
+
+4. Install requirements (Flask)
+
+```bash
+pip install -r requirements.txt
+```
 
 ## Database Migrations (using flask-migrate look at the docs)
 
