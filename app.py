@@ -40,27 +40,32 @@ def users():
 
     return jsonify(res)
 
+
+<< << << < HEAD
+
+
 @app.route("/user", methods=["POST"])
 def register():
     data = request.get_json(force=True)
 
     if ("email" not in data) or ("password" not in data):
-        return jsonify({"error":"No email or password field"}), 400
+        return jsonify({"error": "No email or password field"}), 400
 
     email = data["email"]
     password = data["password"]
 
-    if (email==None or email=="") or (password==None or password ==""):
-        return jsonify({"error":"Must provide email and password"}), 400
+    if (email == None or email == "") or (password == None or password == ""):
+        return jsonify({"error": "Must provide email and password"}), 400
 
     try:
       # validate and get info
         validate_email(email)
     except EmailNotValidError:
         # email is not valid
-        return jsonify({"error":"invalid email"}), 400
+        return jsonify({"error": "invalid email"}), 400
 
-    hashed_pass = bcrypt.hashpw(bytes(password,encoding='utf-8'), bcrypt.gensalt())
+    hashed_pass = bcrypt.hashpw(
+        bytes(password, encoding='utf-8'), bcrypt.gensalt())
     new_user = User(
         email=email,
         password=hashed_pass
@@ -70,9 +75,10 @@ def register():
         db.session.add(new_user)
         db.session.commit()
     except SQLAlchemyError:
-        return jsonify({"error":"User with email already exists"}), 409
-    
-    return jsonify({"success":"User created"}), 200
+        return jsonify({"error": "User with email already exists"}), 409
+
+    return jsonify({"success": "User created"}), 200
+
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 8080))
