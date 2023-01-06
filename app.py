@@ -73,7 +73,5 @@ def register():
         db.session.commit()
     except UniqueViolation:
         return jsonify({"error": "User with email already exists"}), 409
-    except:
-        return jsonify({"error": "Internal error"}), 500
 
     return jsonify({"success": "User created"}), 200
