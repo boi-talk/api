@@ -1,4 +1,4 @@
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import IntegrityError
 from flask import Flask, jsonify, request
 from models import User
 from dotenv import load_dotenv, find_dotenv
@@ -71,7 +71,8 @@ def register():
     try:
         db.session.add(new_user)
         db.session.commit()
-    except SQLAlchemyError:
+    except IntegrityError as e:
+        print(e)
         return jsonify({"error": "User with email already exists"}), 409
 
     return jsonify({"success": "User created"}), 200
