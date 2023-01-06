@@ -40,6 +40,7 @@ def users():
 
     return jsonify(res)
 
+
 @app.route("/user", methods=["POST"])
 def register():
     data = request.get_json(force=True)
@@ -73,7 +74,3 @@ def register():
         return jsonify({"error":"User with email already exists"}), 409
     
     return jsonify({"success":"User created"}), 200
-
-if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 8080))
-    app.run(debug=False, host='0.0.0.0', port=port)
