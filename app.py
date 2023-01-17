@@ -1,8 +1,8 @@
 from sqlalchemy.exc import IntegrityError
 from flask import Flask, jsonify, request
-from models import User
+from models import User, Post
 from dotenv import load_dotenv, find_dotenv
-from flask_sqlalchemy import SQLAlchemy
+from database import db
 from flask_migrate import Migrate
 from email_validator import validate_email, EmailNotValidError
 import os
@@ -12,12 +12,12 @@ load_dotenv(find_dotenv())
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-    "DATABASE_URL").replace("postgres://", "postgresql://", 1)
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL").replace(
+    "postgres://", "postgresql://", 1
+)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # Initialize the database
-db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 db.init_app(app)
 
@@ -32,10 +32,7 @@ def users():
     users = User.query.all()
     res = []
     for user in users:
-        dict = {
-            "email": user.email,
-            "password": user.password
-        }
+        dict = {"id": user.id, "email": user.email, "password": user.password}
         res.append(dict)
 
     return jsonify(res)
@@ -55,18 +52,14 @@ def register():
         return jsonify({"error": "Must provide email and password"}), 400
 
     try:
-      # validate and get info
+        # validate and get info
         validate_email(email)
     except EmailNotValidError:
         # email is not valid
         return jsonify({"error": "invalid email"}), 400
 
-    hashed_pass = bcrypt.hashpw(
-        bytes(password, encoding='utf-8'), bcrypt.gensalt())
-    new_user = User(
-        email=email,
-        password=hashed_pass
-    )
+    hashed_pass = bcrypt.hashpw(bytes(password, encoding="utf-8"), bcrypt.gensalt())
+    new_user = User(email=email, password=hashed_pass)
 
     try:
         db.session.add(new_user)
@@ -76,3 +69,19 @@ def register():
         return jsonify({"error": "User with email already exists"}), 409
 
     return jsonify({"success": "User created"}), 200
+
+
+@app.route("/posts")
+def posts():
+    posts = Post.query.all()
+    res = []
+    for post in posts:
+        dict = {
+            "id": post.id,
+            "userId": post.userId,
+            "body": post.body,
+            "createdAt": post.createdAt,
+        }
+        res.append(dict)
+
+    return jsonify(res)
